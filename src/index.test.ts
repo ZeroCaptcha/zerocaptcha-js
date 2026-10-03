@@ -295,7 +295,7 @@ describe("tasks", () => {
   });
 
   test("a slow read does not carry the wait past its deadline", async () => {
-    // Codex review finding 5: the deadline was checked only after a read finished.
+    // Regression: the deadline was checked only after a read finished.
     const created = await client.createTask(task);
     api.readDelayMs = 2_000;
     const started = Date.now();
@@ -332,7 +332,7 @@ describe("the transport", () => {
   });
 
   test("an answer cut short is retried with the same key, and makes one task", async () => {
-    // Codex review finding 6: the body was read outside the retry, so a task the API made
+    // Regression: the body was read outside the retry, so a task the API made
     // surfaced as a raw error, and calling again made a second, paid task.
     api.cutBodies = 1;
     const created = await client.createTask(task);
